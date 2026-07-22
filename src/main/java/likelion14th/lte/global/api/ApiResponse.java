@@ -1,7 +1,6 @@
 package likelion14th.lte.global.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,19 +10,16 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
-public class ApiResponse<T> { // API 응답
+public class ApiResponse<T> {
 
-    private final Boolean isSuccess; // 성공 여부
-    private final String code; // 응답 코드
-    private final String message; // 메세지
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private final T result; // 응답 데이터
+    private final Boolean isSuccess;
+    private final String code;
+    private final String message;
+    private final T result;
 
-    // HTTP 상태 코드는 바디에는 포함하지 않고, 성공 핸들러에서만 사용
     @JsonIgnore
     private final HttpStatus httpStatus;
 
-    //성공 - 바디 + HTTP Status 정보까지 포함
     public static <T> ApiResponse<T> onSuccess(BaseCode code, T result) {
         return new ApiResponse<>(
                 true,
@@ -34,7 +30,6 @@ public class ApiResponse<T> { // API 응답
         );
     }
 
-    //실패
     public static ApiResponse<Void> onFailure(BaseCode code) {
         return new ApiResponse<>(
                 false,
