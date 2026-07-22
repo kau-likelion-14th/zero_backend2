@@ -4,6 +4,7 @@ package likelion14th.lte.User.entity;
 import jakarta.persistence.*;
 import likelion14th.lte.Entity.BaseEntity;
 import likelion14th.lte.follow.entity.Follow;
+import likelion14th.lte.statistic.entity.Statistic;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,9 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Follow> followings;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "statistic_id", unique = true)
+    private Statistic statistic;
 
     @Builder(access = AccessLevel.PUBLIC)
     private User (String username, String userTag, String introduction){
@@ -51,9 +55,16 @@ public class User extends BaseEntity{
         this.introduction = introduction;
         this.followers = new ArrayList<>();
         this.followings = new ArrayList<>();
+        this.statistic = Statistic.create();
     }
 
     public void updateIntroduction(String introduction){
         this.introduction = introduction;
+    }
+
+    public void initializeStatisticIfAbsent() {
+        if (statistic == null) {
+            statistic = Statistic.create();
+        }
     }
 }
