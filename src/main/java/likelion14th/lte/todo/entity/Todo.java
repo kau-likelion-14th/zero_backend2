@@ -3,7 +3,7 @@ package likelion14th.lte.todo.entity;
 import jakarta.persistence.*;
 import likelion14th.lte.Entity.BaseEntity;
 import likelion14th.lte.category.entity.Category;
-import likelion14th.lte.user.entity.User;
+import likelion14th.lte.User.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
