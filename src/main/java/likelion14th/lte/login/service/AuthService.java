@@ -30,16 +30,21 @@ public class AuthService {
 
     public AuthResponse handleKakaoCode(String code) {
         String kakaoAccessToken = kakaoClient.getAccessToken(code);
-        JsonNode kakaoUserInfo= kakaoClient.getUserInfo(kakaoAccessToken);
+        JsonNode kakaoUserInfo = kakaoClient.getUserInfo(kakaoAccessToken);
 
-        String providerId=kakaoUserInfo.path("id").asText(null);
+        JsonNode providerIdNode = kakaoUserInfo.path("id");
+        String providerId = providerIdNode.isMissingNode() || providerIdNode.isNull()
+                ? null
+                : providerIdNode.asText();
         if (providerId == null || providerId.isBlank()) {
             throw new GeneralException(ErrorCode.KAKAO_API_FAILED);
         }
-        String username = kakaoUserInfo.path("kakao_account")
+        JsonNode nicknameNode = kakaoUserInfo.path("kakao_account")
                 .path("profile")
-                .path("nickname")
-                .asText("카카오 유저");
+                .path("nickname");
+        String username = nicknameNode.isMissingNode() || nicknameNode.isNull() || nicknameNode.asText().isBlank()
+                ? "카카오 유저"
+                : nicknameNode.asText();
 
         User user = userRepository.findByProviderId(providerId)
                 .orElseGet(() -> userRepository.save(
