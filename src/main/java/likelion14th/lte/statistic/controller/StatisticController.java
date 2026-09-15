@@ -7,6 +7,8 @@ import likelion14th.lte.global.api.SuccessCode;
 import likelion14th.lte.statistic.dto.response.StatisticResponse;
 import likelion14th.lte.statistic.service.StatisticService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +24,8 @@ public class StatisticController {
 
     @GetMapping
     @Operation(summary = "통계 조회")
-    public ApiResponse<StatisticResponse> getStatistic(@RequestParam Long userId) {
+    public ApiResponse<StatisticResponse> getStatistic(@AuthenticationPrincipal Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getSubject());
         return ApiResponse.onSuccess(
                 SuccessCode.STATISTICS_GET_SUCCESS,
                 statisticService.getStatistic(userId)

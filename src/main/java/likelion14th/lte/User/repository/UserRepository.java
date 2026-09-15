@@ -12,9 +12,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
     Page<User> findByUsernameContainingIgnoreCase(String nickName, Pageable pageable);
     Optional<User> findByUserTag(String UserTag);
+    Optional<User> findByProviderId(String providerId);
 
     @Query("SELECT u FROM User u " +
             "WHERE u.id != :userId " +
             "AND NOT EXISTS (SELECT f FROM Follow f WHERE f.fromUser.id = :userId AND f.toUser.id = u.id)")
     Page<User> findCanFollowUsers(@Param("userId") Long userId, Pageable pageable);
+    Optional<User> findByUsername(String username);
 }

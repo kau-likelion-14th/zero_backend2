@@ -44,3 +44,26 @@ spring:
 Logging:
   level:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+youtube:
+  api-key: ${YOUTUBE_API_KEY}
+  api-base: https://www.googleapis.com/youtube/v3
+
+
+
+kakao:
+  client-id: ${KAKAO_REST_API_KEY}
+  client-secret: ${KAKAO_CLIENT_SECRET}
+  redirect-uri: ${KAKAO_REDIRECT_URI:http://localhost:3000/login/oauth2/code/kakao}
+  token-uri: https://kauth.kakao.com/oauth/token
+  user-info-uri: https://kapi.kakao.com/v2/user/me
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-exp-ms: ${JWT_EXPIRATION:3600000}
+  refresh-exp-ms: ${JWT_REFRESH_EXPIRATION:1209600000}
+
+auth:
+  cookie:
+    secure: ${AUTH_COOKIE_SECURE:false}
+    same-site: ${AUTH_COOKIE_SAME_SITE:Lax}
