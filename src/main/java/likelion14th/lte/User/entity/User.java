@@ -60,7 +60,7 @@ public class User extends BaseEntity{
     private RefreshToken refreshToken;
 
     @Builder(access = AccessLevel.PUBLIC)
-    private User (String username, String userTag, String introduction, String providerId){
+    private User (String username, String userTag, String introduction, String providerId, String s3ImageKey, String profileImage) {
         this.username = username;
         this.userTag = userTag;
         this.providerId = providerId;
@@ -69,6 +69,18 @@ public class User extends BaseEntity{
         this.followings = new ArrayList<>();
         this.statistic = Statistic.create();
         this.savedSongs = new ArrayList<>();
+        this.s3ImageKey = s3ImageKey;
+        this.profileImage = profileImage;
+    }
+
+    public void updateProfileImage(String profileImage, String s3ImageKey) {
+        this.s3ImageKey = s3ImageKey;
+        this.profileImage = profileImage;
+    }
+
+    public void removeProfileImage() {
+        this.s3ImageKey = null;
+        this.profileImage = null;
     }
 
     public void updateIntroduction(String introduction){

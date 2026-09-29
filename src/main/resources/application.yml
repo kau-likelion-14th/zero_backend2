@@ -1,6 +1,7 @@
 spring:
   config:
     import: optional:file:.env[.properties]
+
   profiles:
     active: local
 
@@ -13,7 +14,18 @@ spring:
 server:
   port: ${PORT:8080}
 
-#Swagger
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region: ${AWS_REGION}
+    s3:
+      bucket: ${AWS_BUCKET}
+      path:
+        location: user/
+
+# Swagger
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -28,11 +40,13 @@ spring:
   config:
     activate:
       on-profile: local
+
   datasource:
     url: ${LOCAL_DB_URL}
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     show-sql: true
     hibernate:
@@ -48,8 +62,6 @@ Logging:
 youtube:
   api-key: ${YOUTUBE_API_KEY}
   api-base: https://www.googleapis.com/youtube/v3
-
-
 
 kakao:
   client-id: ${KAKAO_REST_API_KEY}
