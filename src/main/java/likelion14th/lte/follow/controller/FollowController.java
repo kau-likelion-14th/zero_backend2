@@ -79,7 +79,7 @@ public class FollowController {
     }
 
     @GetMapping
-    @Operation(summary = "팔로우 가능한 사용자 목록 조회", description = "아직 팔로우하지 않은 사용자 목록을 페이징하여 조회합니다.")
+    @Operation(summary = "친구 페이지 조회", description = "로그인한 사용자가 아직 팔로우하지 않은 사용자를 페이징하여 조회합니다.")
     public ApiResponse<Page<FollowUserResponse>> getCanFollowUsers(
             @AuthenticationPrincipal Jwt jwt,
             @ParameterObject @PageableDefault(size = 10, page = 0) Pageable pageable
