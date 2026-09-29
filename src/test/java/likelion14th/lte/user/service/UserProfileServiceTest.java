@@ -1,7 +1,7 @@
-package likelion14th.lte.User.service;
+package likelion14th.lte.user.service;
 
-import likelion14th.lte.User.entity.User;
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.entity.User;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.utils.Image.ImageUtil;
 import likelion14th.lte.utils.S3.S3Dto;
 import likelion14th.lte.utils.S3.S3Utils;
@@ -42,11 +42,12 @@ class UserProfileServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         doNothing().when(s3Utils).deleteFile("user/existing-image.png");
 
-        userProfileService.deleteProfileImage(1L);
+        var response = userProfileService.deleteProfileImage(1L);
 
         verify(s3Utils).deleteFile("user/existing-image.png");
         assertThat(user.getS3ImageKey()).isNull();
         assertThat(user.getProfileImage()).isNull();
+        assertThat(response.getProfileImageUrl()).isNull();
     }
 
     @Test
@@ -57,11 +58,12 @@ class UserProfileServiceTest {
                 .build();
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        userProfileService.deleteProfileImage(1L);
+        var response = userProfileService.deleteProfileImage(1L);
 
         verifyNoInteractions(s3Utils);
         assertThat(user.getS3ImageKey()).isNull();
         assertThat(user.getProfileImage()).isNull();
+        assertThat(response.getProfileImageUrl()).isNull();
     }
 
     @Test
@@ -88,6 +90,36 @@ class UserProfileServiceTest {
         assertThat(user.getS3ImageKey()).isEqualTo("user/new-image.png");
         assertThat(user.getProfileImage())
                 .isEqualTo("https://bucket.s3.ap-northeast-2.amazonaws.com/user/new-image.png");
+    }
+
+    @Test
+    void updateIntroduction_updatesOnlyTheAuthenticatedUsersIntroduction() {
+        User user = User.builder()
+                .username("tester")
+                .userTag("TEST1234")
+                .introduction("before")
+                .build();
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        var response = userProfileService.updateIntroduction(1L, "after");
+
+        assertThat(response.getIntroduction()).isEqualTo("after");
+        assertThat(user.getIntroduction()).isEqualTo("after");
+    }
+
+    @Test
+    void getOtherUserProfile_usesTheTargetUserId() {
+        User user = User.builder()
+                .username("friend")
+                .userTag("FRIEND01")
+                .introduction("hello")
+                .build();
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+
+        var response = userProfileService.getOtherUserProfile(2L);
+
+        assertThat(response.getUsername()).isEqualTo("friend#FRIEND01");
+        verify(userRepository).findById(2L);
     }
 
     private User userWithProfileImage() {

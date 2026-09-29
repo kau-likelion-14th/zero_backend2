@@ -1,6 +1,6 @@
 package likelion14th.lte.follow.dto;
 
-import likelion14th.lte.User.entity.User;
+import likelion14th.lte.user.entity.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package likelion14th.lte.User.entity;
+package likelion14th.lte.user.entity;
 
 
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
 package likelion14th.lte.todo.service;
 
-import likelion14th.lte.User.entity.User;
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.entity.User;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.category.entity.Category;
 import likelion14th.lte.category.repository.CategoryRepository;
 import likelion14th.lte.global.api.ErrorCode;

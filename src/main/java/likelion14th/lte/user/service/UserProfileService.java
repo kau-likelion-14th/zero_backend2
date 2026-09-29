@@ -1,9 +1,9 @@
-package likelion14th.lte.User.service;
+package likelion14th.lte.user.service;
 
-import likelion14th.lte.User.dto.request.CreateTestUserRequest;
-import likelion14th.lte.User.dto.responce.UserProfileResponse;
-import likelion14th.lte.User.entity.User;
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.dto.request.CreateTestUserRequest;
+import likelion14th.lte.user.dto.response.UserProfileResponse;
+import likelion14th.lte.user.entity.User;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.global.api.ErrorCode;
 import likelion14th.lte.global.exception.GeneralException;
 import likelion14th.lte.utils.Image.ImageUtil;
@@ -46,11 +46,18 @@ public class UserProfileService {
 
     @Transactional(readOnly = true)
     public UserProfileResponse getUserProfile(Long userId) {
+        return UserProfileResponse.from(getUserOrThrow(userId));
+    }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new GeneralException(ErrorCode.USER_NOT_FOUND));
+    @Transactional(readOnly = true)
+    public UserProfileResponse getOtherUserProfile(Long toUserId) {
+        return UserProfileResponse.from(getUserOrThrow(toUserId));
+    }
 
+    @Transactional
+    public UserProfileResponse updateIntroduction(Long userId, String introduce) {
+        User user = getUserOrThrow(userId);
+        user.updateIntroduction(introduce);
         return UserProfileResponse.from(user);
     }
 
@@ -108,22 +115,27 @@ public class UserProfileService {
     }
 
     @Transactional
-    public void deleteProfileImage(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+    public UserProfileResponse deleteProfileImage(Long userId) {
+        User user = getUserOrThrow(userId);
 
         String imageKey = user.getS3ImageKey();
         if (imageKey == null || imageKey.isBlank()) {
             user.removeProfileImage();
-            return;
+            return UserProfileResponse.from(user);
         }
 
         try {
             s3Utils.deleteFile(imageKey);
             user.removeProfileImage();
+            return UserProfileResponse.from(user);
         } catch (UtilException e) {
             throw GeneralException.of(mapToErrorCode(e.getReason()));
         }
+    }
+
+    private User getUserOrThrow(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
     }
 
     private ErrorCode mapToErrorCode(UtilException.Reason reason) {

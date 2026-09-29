@@ -1,7 +1,7 @@
 package likelion14th.lte.follow.service;
 
-import likelion14th.lte.User.entity.User;
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.entity.User;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.follow.dto.FollowUserResponse;
 import likelion14th.lte.follow.repository.FollowRepository;
 import org.junit.jupiter.api.Test;

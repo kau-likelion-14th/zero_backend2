@@ -1,6 +1,6 @@
-package likelion14th.lte.User.repository;
+package likelion14th.lte.user.repository;
 
-import likelion14th.lte.User.entity.User;
+import likelion14th.lte.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

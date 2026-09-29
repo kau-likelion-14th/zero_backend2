@@ -1,8 +1,8 @@
 package likelion14th.lte.youtube.service;
 
 
-import likelion14th.lte.User.entity.User;
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.entity.User;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.global.api.ErrorCode;
 import likelion14th.lte.global.exception.GeneralException;
 import likelion14th.lte.youtube.client.YouTubeClient;

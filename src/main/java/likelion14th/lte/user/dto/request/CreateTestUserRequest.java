@@ -1,4 +1,4 @@
-package likelion14th.lte.User.dto.request;
+package likelion14th.lte.user.dto.request;
 
 
 import lombok.AccessLevel;

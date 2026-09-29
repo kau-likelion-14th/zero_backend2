@@ -1,7 +1,7 @@
 package likelion14th.lte.login.domain;
 
 import jakarta.persistence.*;
-import likelion14th.lte.User.entity.User;
+import likelion14th.lte.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

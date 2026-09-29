@@ -2,7 +2,7 @@ package likelion14th.lte.login.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import likelion14th.lte.User.entity.User;
+import likelion14th.lte.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
