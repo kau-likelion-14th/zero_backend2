@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class SwaggerConfig{
+public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
         Info apiInfo = new Info()
                 .version("v1.0.0")
                 .title("LTE API")
-                .description("LTE API Documentation");
+                .description("Lte API Documentation");
 
         String jwtSchemeName = "BearerToken";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
@@ -33,14 +33,17 @@ public class SwaggerConfig{
 
         Server localServer = new Server()
                 .url("http://localhost:8080")
-                .description("Local Server");
-        // 나중에 배포 후에는 또 만들어서 아래 List 안에 넣어주기
+                .description("Lte Local Server");
+
+        Server httpServer = new Server()
+                .url("http://Lte-dev-env.eba-xaqgpxhu.ap-northeast-2.elasticbeanstalk.com")
+                .description("LTE HTTP Server");
 
         return new OpenAPI()
                 .info(apiInfo)
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .servers(List.of(localServer));
+                .servers(List.of(localServer, httpServer));
     }
 
     @Bean
