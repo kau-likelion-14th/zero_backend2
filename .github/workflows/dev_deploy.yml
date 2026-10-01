@@ -49,18 +49,18 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          mkdir -p develop
+          mkdir -p deploy
           cp build/libs/*.jar deploy/application.jar
-          cp Procfile deploy/Profile
+          cp Procfile deploy/Procfile
           cp .env deploy/.env
           cp -r .ebextensions_dev deploy/.ebextensions
-          cp. -r .platform deploy/.platform
+          cp -r .platform deploy/.platform
         
-          cd deploy && zip -r deploy.zip
+          cd deploy && zip -r deploy.zip .
         
       - name : Verify deploy zip content
         run: |
-          unzip -l deploy/deploy/zip | head -n 50
+          unzip -l deploy/deploy.zip | head -n 50
           unzip -l deploy/deploy.zip -i "pom.xml|Buildfile|src/|repository/"
           && exit 1 || echo "OK: no sample source"
 
@@ -68,7 +68,7 @@ jobs:
         uses: einaregilsson/beanstalk-deploy@v20
         with:
             aws_access_key : ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
-            aws_secret_key : ${{ SECRETS.AWS_ACTION_SECRET_ACCESS_KEY }}
+            aws_secret_key : ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
 
             application_name: "lte-dev"
             version_label : github-actions-${{steps.current-time.outputs.formattedTime }}
