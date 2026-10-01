@@ -1,6 +1,6 @@
 package likelion14th.lte.todo.service;
 
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.global.api.ErrorCode;
 import likelion14th.lte.global.exception.GeneralException;
 import likelion14th.lte.todo.dto.response.TodoCalendarMonthResponse;

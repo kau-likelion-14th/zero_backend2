@@ -13,8 +13,6 @@ import lombok.Getter;
 @Configuration
 @Getter
 public class AmazonConfig {
-    //todo s3 세션떄 주석 해제 할 것
-    /*
     private final String bucket;
     private final String accessKey;
     private final String secretKey;
@@ -45,6 +43,4 @@ public class AmazonConfig {
                 )
                 .build();
     }
-
- */
 }

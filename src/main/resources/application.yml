@@ -3,7 +3,6 @@ spring:
     import: optional:file:.env[.properties]
   profiles:
     active: local
-
   servlet:
     multipart:
       enabled: true
@@ -13,7 +12,7 @@ spring:
 server:
   port: ${PORT:8080}
 
-#Swagger
+# Swagger
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -21,6 +20,40 @@ springdoc:
     path: /swagger-ui/index.html
     display-request-duration: true
     operations-sorter: method
+
+youtube:
+  api-key: ${YOUTUBE_API_KEY}
+  api-base: https://www.googleapis.com/youtube/v3
+
+# Kakao OAuth
+kakao:
+  client-id: ${KAKAO_REST_API_KEY}
+  client-secret: ${KAKAO_CLIENT_SECRET}
+  redirect-uri: ${KAKAO_REDIRECT_URI:http://localhost:3000/login/oauth2/code/kakao}
+  token-uri: https://kauth.kakao.com/oauth/token
+  user-info-uri: https://kapi.kakao.com/v2/user/me
+
+# Our JWT
+jwt:
+  secret: ${JWT_SECRET}
+  access-exp-ms: ${JWT_EXPIRATION:3600000}
+  refresh-exp-ms: ${JWT_REFRESH_EXPIRATION:1209600000}
+
+auth:
+  cookie:
+    secure: ${AUTH_COOKIE_SECURE:false}
+    same-site: ${AUTH_COOKIE_SAME_SITE:Lax}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region: ${AWS_REGION}
+    s3:
+      bucket: ${AWS_BUCKET}
+      path:
+        location: user/
 
 ---
 # local profile
@@ -39,31 +72,9 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
+        format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
 
-Logging:
+logging:
   level:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
-
-youtube:
-  api-key: ${YOUTUBE_API_KEY}
-  api-base: https://www.googleapis.com/youtube/v3
-
-
-
-kakao:
-  client-id: ${KAKAO_REST_API_KEY}
-  client-secret: ${KAKAO_CLIENT_SECRET}
-  redirect-uri: ${KAKAO_REDIRECT_URI:http://localhost:3000/login/oauth2/code/kakao}
-  token-uri: https://kauth.kakao.com/oauth/token
-  user-info-uri: https://kapi.kakao.com/v2/user/me
-
-jwt:
-  secret: ${JWT_SECRET}
-  access-exp-ms: ${JWT_EXPIRATION:3600000}
-  refresh-exp-ms: ${JWT_REFRESH_EXPIRATION:1209600000}
-
-auth:
-  cookie:
-    secure: ${AUTH_COOKIE_SECURE:false}
-    same-site: ${AUTH_COOKIE_SAME_SITE:Lax}

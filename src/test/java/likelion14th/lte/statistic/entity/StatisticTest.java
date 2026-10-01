@@ -1,6 +1,6 @@
 package likelion14th.lte.statistic.entity;
 
-import likelion14th.lte.User.entity.User;
+import likelion14th.lte.user.entity.User;
 import likelion14th.lte.todo.entity.WeekEnum;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package likelion14th.lte.youtube.service;
 
 
-import likelion14th.lte.User.entity.User;
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.entity.User;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.global.api.ErrorCode;
 import likelion14th.lte.global.exception.GeneralException;
 import likelion14th.lte.youtube.client.YouTubeClient;
@@ -25,23 +25,13 @@ import java.util.List;
 @Transactional
 public class YouTubeService {
 
-    private static final String DUMMY_LOGIN_ID = "dummy";
-    private static final String DUMMY_USERNAME = "dummy";
-    private static final String DUMMY_USER_TAG = "dummy";
-
     private final YouTubeClient youTubeClient;
     private final SavedSongRepository savedSongRepository;
     private final UserRepository userRepository;
 
-    private User getDummyUser() {
-        return userRepository.findByUsername(DUMMY_USERNAME)
-                .orElseGet(()-> userRepository.save(
-                        User.builder()
-                                .username(DUMMY_USERNAME)
-                                .userTag(DUMMY_USER_TAG)
-                                .introduction("더미 데이터")
-                                .build()
-                ));
+    private User getUserOrThrow(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -72,12 +62,11 @@ public class YouTubeService {
         return result;
     }
 
-    public SavedSongResponse saveSong(String songId){
+    public SavedSongResponse saveSong(Long userId, String songId) {
         if (songId == null || songId.isBlank()){
             throw new GeneralException(ErrorCode.BAD_REQUEST);
         }
-        //TODO: 로그인 기능 구현 후 수정예정
-        User user = getDummyUser();
+        User user = getUserOrThrow(userId);
 
         if (savedSongRepository.existsByUserAndSongId(user, songId)){
             throw new GeneralException(ErrorCode.SONG_ALREADY_SAVED);
@@ -110,8 +99,9 @@ public class YouTubeService {
         return items.get(0);
     }
 
-    public List<SavedSongResponse> mySavedSongs(){
-        User user = getDummyUser();
+    @Transactional(readOnly = true)
+    public List<SavedSongResponse> mySavedSongs(Long userId) {
+        User user = getUserOrThrow(userId);
 
         return savedSongRepository.findAllByUserOrderBySavedAtDesc(user)
                 .stream()
@@ -119,8 +109,8 @@ public class YouTubeService {
                 .toList();
     }
 
-    public void deleteSavedSong(String songId){
-        User user = getDummyUser();
+    public void deleteSavedSong(Long userId, String songId) {
+        User user = getUserOrThrow(userId);
 
         SavedSong savedSong= savedSongRepository.findByUserAndSongId(user, songId)
                 .orElseThrow(()-> new GeneralException(ErrorCode.SONG_NOT_FOUND));

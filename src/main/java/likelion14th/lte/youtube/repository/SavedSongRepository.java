@@ -1,6 +1,6 @@
 package likelion14th.lte.youtube.repository;
 
-import likelion14th.lte.User.entity.User;
+import likelion14th.lte.user.entity.User;
 import likelion14th.lte.youtube.domain.SavedSong;
 
 import org.springframework.data.jpa.repository.JpaRepository;

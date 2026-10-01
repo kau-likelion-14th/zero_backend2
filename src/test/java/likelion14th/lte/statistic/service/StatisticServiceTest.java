@@ -1,8 +1,8 @@
 package likelion14th.lte.statistic.service;
 
 import jakarta.persistence.EntityManager;
-import likelion14th.lte.User.entity.User;
-import likelion14th.lte.User.repository.UserRepository;
+import likelion14th.lte.user.entity.User;
+import likelion14th.lte.user.repository.UserRepository;
 import likelion14th.lte.statistic.entity.StatWeek;
 import likelion14th.lte.todo.repository.TodoDateRepository;
 import org.junit.jupiter.api.Test;
