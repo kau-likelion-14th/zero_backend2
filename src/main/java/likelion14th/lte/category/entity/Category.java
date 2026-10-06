@@ -20,4 +20,10 @@ public class Category extends BaseEntity {
     @Column(nullable = false)
     private String categoryName = "공부";
 
+    public static Category create(String categoryName) {
+        Category category = new Category();
+        category.categoryName = categoryName;
+        return category;
+    }
+
 }
