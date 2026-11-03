@@ -18,5 +18,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE u.id != :userId " +
             "AND NOT EXISTS (SELECT f FROM Follow f WHERE f.fromUser.id = :userId AND f.toUser.id = u.id)")
     Page<User> findCanFollowUsers(@Param("userId") Long userId, Pageable pageable);
+
+    @Query("SELECT u FROM User u " +
+            "WHERE u.id != :userId " +
+            "AND LOWER(u.username) LIKE LOWER(CONCAT('%', :nickname, '%')) ESCAPE '!' " +
+            "AND NOT EXISTS (SELECT f FROM Follow f WHERE f.fromUser.id = :userId AND f.toUser.id = u.id) " +
+            "ORDER BY u.id ASC")
+    Page<User> searchCanFollowUsers(@Param("userId") Long userId,
+                                    @Param("nickname") String escapedNickname,
+                                    Pageable pageable);
     Optional<User> findByUsername(String username);
 }

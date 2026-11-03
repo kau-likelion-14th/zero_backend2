@@ -82,6 +82,22 @@ public class FollowService {
                 .map(FollowUserResponse::from);
     }
 
+    @Transactional(readOnly = true)
+    public Page<FollowUserResponse> searchUsers(Long userId, String nickname, Pageable pageable) {
+        getUser(userId);
+        if (nickname == null || nickname.isBlank()) {
+            throw new GeneralException(ErrorCode.BAD_REQUEST);
+        }
+
+        // LIKE의 와일드카드 문자는 검색어 그대로 취급합니다.
+        String escapedNickname = nickname.strip()
+                .replace("!", "!!")
+                .replace("%", "!%")
+                .replace("_", "!_");
+        return userRepository.searchCanFollowUsers(userId, escapedNickname, pageable)
+                .map(FollowUserResponse::from);
+    }
+
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
