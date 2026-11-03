@@ -88,4 +88,16 @@ public class FollowController {
         Page<FollowUserResponse> response = followService.getCanFollowUsers(userId, pageable);
         return ApiResponse.onSuccess(SuccessCode.FOLLOW_SEARCH_SUCCESS, response);
     }
+
+    @GetMapping("/search")
+    @Operation(summary = "닉네임으로 친구 검색", description = "본인과 이미 팔로우한 사용자를 제외하고 닉네임이 일치하는 사용자를 페이징하여 검색합니다.")
+    public ApiResponse<Page<FollowUserResponse>> searchUsers(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam("nickname") String nickname,
+            @ParameterObject @PageableDefault(size = 10, page = 0) Pageable pageable
+    ) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        Page<FollowUserResponse> response = followService.searchUsers(userId, nickname, pageable);
+        return ApiResponse.onSuccess(SuccessCode.FOLLOW_SEARCH_SUCCESS, response);
+    }
 }
